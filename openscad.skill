@@ -27,7 +27,9 @@ macOS binary: `/opt/homebrew/bin/openscad` (check `which openscad`).
 ## Show the user
 
 Render angled + side + top, open all (macOS). Do this after each round unless
-told otherwise.
+told otherwise. Do not do this until you've finalized the design and are not
+going to make any more changes that round.
+
 ```sh
 # angled
 openscad --render --autocenter --viewall --imgsize=1000,900 -o /tmp/model.png model.scad
