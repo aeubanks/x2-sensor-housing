@@ -23,6 +23,7 @@ end_roof_len = 5;
 // ---- mount tabs ----
 hole_spacing = 170;
 hole_diameter = 3.5;
+roof_hole_play = 1;
 tab_thickness = 3;
 // material past each hole center
 tab_margin = 3;
@@ -87,10 +88,16 @@ module tray() {
 				cube([tab_len, tray_width, tab_thickness]);
 			}
 		}
-		// screw holes
-		for (x = [tray_len / 2 - hole_spacing / 2, tray_len / 2 + hole_spacing / 2]) {
-			translate([x, tray_width / 2, -1]) {
-				cylinder(d = hole_diameter, h = tab_thickness + 2);
+		// left screw hole
+		translate([tray_len / 2 - hole_spacing / 2, tray_width / 2, -1]) {
+			cylinder(d = hole_diameter, h = tab_thickness + 2);
+		}
+		// roof-side screw slot with lengthwise play toward tray center
+		hull() {
+			for (x = [tray_len / 2 + hole_spacing / 2, tray_len / 2 + hole_spacing / 2 - roof_hole_play]) {
+				translate([x, tray_width / 2, -1]) {
+					cylinder(d = hole_diameter, h = tab_thickness + 2);
+				}
 			}
 		}
 	}
