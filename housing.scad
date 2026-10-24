@@ -40,7 +40,7 @@ cavity_len = sensor_len + 2 * sensor_clearance;
 cavity_width = sensor_width + 2 * sensor_clearance;
 tray_width = cavity_width + 2 * tray_wall_thickness;
 wall_height = tray_floor_thickness + sensor_height;
-side_wall_gap = cover_len + interlock_len + 2 * window_play;
+side_wall_gap = cover_len + 2 * window_play;
 side_wall_gap_start = (cavity_len - side_wall_gap) / 2;
 side_wall_gap_end = (cavity_len + side_wall_gap) / 2;
 cover_wall_height = sensor_height + contact_pad_height - cover_wall_to_floor_gap; // roof sits on the pads, so cover is lifted by pad height
@@ -71,10 +71,12 @@ module tray() {
 					cube([cavity_len + tray_wall_thickness - side_wall_gap_end, tray_wall_thickness, wall_height]);
 				}
 			}
-			// tray_interlock ledges at the closed end of the side_wall_gap
-			for (y = [0, tray_width - tray_wall_thickness]) {
-				translate([side_wall_gap_end - interlock_len, y, wall_height - tray_interlock_height]) {
-					cube([interlock_len, tray_wall_thickness, tray_interlock_height]);
+			// tray_interlock ledges at both ends of the side_wall_gap
+			for (x = [side_wall_gap_start, side_wall_gap_end - interlock_len]) {
+				for (y = [0, tray_width - tray_wall_thickness]) {
+					translate([x, y, wall_height - tray_interlock_height]) {
+						cube([interlock_len, tray_wall_thickness, tray_interlock_height]);
+					}
 				}
 			}
 			// mount tabs for screws
@@ -95,22 +97,25 @@ module tray() {
 }
 
 module cover() {
-	// cover walls; far end notched so it slides under the tray_interlock
+	// cover walls; both ends notched so they slide under the tray_interlock
 	for (y = [0, tray_width - tray_wall_thickness]) {
 		translate([-cover_len / 2, y, 0]) {
-			cube([cover_len - interlock_len, tray_wall_thickness, cover_wall_height]);
+			cube([interlock_len, tray_wall_thickness, cover_interlock_height]);
+		}
+		translate([-cover_len / 2 + interlock_len, y, 0]) {
+			cube([cover_len - 2 * interlock_len, tray_wall_thickness, cover_wall_height]);
 		}
 		translate([cover_len / 2 - interlock_len, y, 0]) {
 			cube([interlock_len, tray_wall_thickness, cover_interlock_height]);
 		}
 	}
-	// roof (stops interlock_len short of the far end)
-	translate([-cover_len / 2, 0, cover_wall_height]) {
-		cube([cover_len - interlock_len, tray_width, tray_wall_thickness]);
+	// roof between the notched ends
+	translate([-cover_len / 2 + interlock_len, 0, cover_wall_height]) {
+		cube([cover_len - 2 * interlock_len, tray_width, tray_wall_thickness]);
 	}
 	// sensor-contact pads at both ends under roof
     // (to reduce contact area between cover and sensor for more sensitivity)
-	for (x = [-cover_len / 2, cover_len / 2 - 2 * interlock_len]) {
+	for (x = [-cover_len / 2 + interlock_len, cover_len / 2 - 2 * interlock_len]) {
 		translate([x, tray_wall_thickness, cover_wall_height - contact_pad_height]) {
 			cube([interlock_len, tray_width - 2 * tray_wall_thickness, contact_pad_height]);
 		}
