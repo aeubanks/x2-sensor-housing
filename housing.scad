@@ -16,7 +16,7 @@ sensor_height = 7.62;
 // ---- tray body ----
 tray_wall_thickness = 2;
 // per-side clearance
-sensor_clearance = 0.75;
+sensor_clearance = 0.5;
 tray_floor_thickness = 2;
 end_roof_len = 5;
 
