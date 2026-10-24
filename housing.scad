@@ -25,7 +25,7 @@ hole_spacing = 170;
 hole_diameter = 3.5;
 tab_thickness = 3;
 // material past each hole center
-tab_margin = 6;
+tab_margin = 3;
 
 // ---- cover ----
 cover_len = 76.2;
