@@ -1,0 +1,78 @@
+---
+name: openscad
+description: Use when creating, editing, rendering, or iterating on OpenSCAD (.scad) 3D models, exporting/viewing STL files, or previewing SCAD geometry with the openscad CLI. Covers headless PNG rendering, looking at the render to iterate, cross-sections, dimension checks, and fixing the model.
+---
+
+# OpenSCAD modeling & iteration
+
+Drive OpenSCAD from the CLI. Render previews, look at them, refine.
+macOS binary: `/opt/homebrew/bin/openscad` (check `which openscad`).
+
+## Loop
+
+1. Render PNG (no GUI):
+   ```sh
+   openscad --render --autocenter --viewall --imgsize=1000,900 -o /tmp/model.png model.scad
+   ```
+   `--render` = full CGAL evaluation. `--viewall` fits frame. Check output for
+   `Status: NoError`, plus any `ERROR`/`WARNING`.
+2. Look at it: Read the PNG. It returns as an attachment. Never guess the
+   shape — render and view.
+3. Edit `model.scad`. Repeat from 1.
+4. Export STL when the shape is right:
+   ```sh
+   openscad -o model.stl model.scad
+   ```
+
+## Show the user
+
+Render angled + side + top, open all (macOS). Do this after each round unless
+told otherwise.
+```sh
+# angled
+openscad --render --autocenter --viewall --imgsize=1000,900 -o /tmp/model.png model.scad
+# side (orthographic)
+openscad --render --projection=o --autocenter --viewall \
+  --camera=0,-300,27,90,0,0,300 --imgsize=700,900 -o /tmp/model_side.png model.scad
+# top (orthographic)
+openscad --render --projection=o --autocenter --viewall \
+  --camera=0,0,50,0,0,0,0 --imgsize=800,800 -o /tmp/model_top.png model.scad
+open /tmp/model.png /tmp/model_side.png /tmp/model_top.png
+```
+
+## Cross-section (find grooves, holes, voids)
+
+Export STL first. Then:
+```sh
+cat > /tmp/xsec.scad <<'EOF'
+difference() {
+	import("model.stl");
+	translate([0,-100,0]) cube([200,200,200]);
+}
+EOF
+openscad --render --projection=o --viewall --autocenter \
+  --camera=0,-300,27,90,0,0,300 --imgsize=700,900 -o /tmp/xsec.png /tmp/xsec.scad
+open /tmp/xsec.png
+```
+Top view: `--camera=0,0,50,0,0,0,0`.
+
+## Check real dimensions
+
+Measure the STL, not the source. ASCII STL here; parse vertices:
+```sh
+python3 - <<'PY'
+import re
+t = open("model.stl").read()
+v = [tuple(map(float, m)) for m in re.findall(r"vertex\s+(\S+)\s+(\S+)\s+(\S+)", t)]
+xs=[a for a,_,_ in v]; ys=[b for _,b,_ in v]; zs=[c for _,_,c in v]
+print("X %.2f  Y %.2f  Z %.2f" % (max(xs)-min(xs), max(ys)-min(ys), max(zs)-min(zs)))
+PY
+```
+
+## Conventions
+
+- Use as few constants as possible. Derive values from those (`base_r / 2`, `base_r - ring`).
+- No comments narrating past state or filler comments.
+- Keep manifold: `Status: NoError`, no warnings. Union primitives so they
+  overlap/fill — no grooves, holes, or cavities. Verify with a cross-section.
+- `$fa`/`$fs` at real size give smoother curves than scaling up a tiny model.
