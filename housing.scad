@@ -21,7 +21,7 @@ tray_floor_thickness = 2;
 end_roof_len = 5;
 
 // ---- mount tabs ----
-hole_spacing = 170;
+hole_spacing = 172;
 hole_diameter = 3.5;
 roof_hole_play = 1;
 tab_thickness = 3;
