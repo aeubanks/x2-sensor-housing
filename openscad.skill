@@ -6,18 +6,16 @@ description: Use when creating, editing, rendering, or iterating on OpenSCAD (.s
 # OpenSCAD modeling & iteration
 
 Drive OpenSCAD from the CLI. Render previews, look at them, refine.
-macOS binary: `/opt/homebrew/bin/openscad` (check `which openscad`).
 
 ## Loop
 
-1. Render PNG (no GUI):
+1. Render PNG (does not open GUI, purely command line):
    ```sh
    openscad --render --autocenter --viewall --imgsize=1000,900 -o /tmp/model.png model.scad
    ```
    `--render` = full CGAL evaluation. `--viewall` fits frame. Check output for
    `Status: NoError`, plus any `ERROR`/`WARNING`.
-2. Look at it: Read the PNG. It returns as an attachment. Never guess the
-   shape — render and view.
+2. Inspect the rendered PNG to see how it actually ends up. Do not guess the shape.
 3. Edit `model.scad`. Repeat from 1.
 4. Export STL when the shape is right:
    ```sh
@@ -26,9 +24,9 @@ macOS binary: `/opt/homebrew/bin/openscad` (check `which openscad`).
 
 ## Show the user
 
-Render angled + side + top, open all (macOS). Do this after each round unless
-told otherwise. Do not do this until you've finalized the design and are not
-going to make any more changes that round.
+Render angled + side + top, and open all images for the user to inspect. Do
+this after each round unless told otherwise. Do not do this until you've
+finalized the design and are not going to make any more changes that round.
 
 ```sh
 # angled
