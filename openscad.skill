@@ -21,6 +21,11 @@ Drive OpenSCAD from the CLI. Render previews, look at them, refine.
    ```sh
    openscad -o model.stl model.scad
    ```
+5. Export sub-parts:
+   ```sh
+   openscad -D 'part="tray"'  -o tray.stl  model.scad
+   openscad -D 'part="cover"' -o cover.stl model.scad
+   ```
 
 ## Show the user
 
