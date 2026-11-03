@@ -37,6 +37,7 @@ window_play = 1.5;       // lengthwise play between cover and side_wall_gap
 interlock_len = 8;
 tray_interlock_height = 2;   // tray wall ledge that captures the cover
 contact_pad_height = 1;  // sensor-contact pad height
+contact_pad_len = 12;    // sensor-contact pad length
 interlock_clearance = 0.5; // vertical gap so the cover slides under the tray_interlock
 
 cavity_len = sensor_len + 2 * sensor_clearance;
@@ -127,9 +128,9 @@ module cover() {
 	}
 	// sensor-contact pads at both ends under roof
     // (to reduce contact area between cover and sensor for more sensitivity)
-	for (x = [-cover_len / 2 + interlock_len, cover_len / 2 - 2 * interlock_len]) {
+	for (x = [-cover_len / 2 + interlock_len, cover_len / 2 - interlock_len - contact_pad_len]) {
 		translate([x, tray_wall_thickness, cover_wall_height - contact_pad_height]) {
-			cube([interlock_len, tray_width - 2 * tray_wall_thickness, contact_pad_height]);
+			cube([contact_pad_len, tray_width - 2 * tray_wall_thickness, contact_pad_height]);
 		}
 	}
 }
