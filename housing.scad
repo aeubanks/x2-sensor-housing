@@ -27,6 +27,8 @@ roof_hole_play = 1;
 tab_thickness = 3;
 // material past each hole center
 tab_margin = 5;
+// room between the roof-side slot edge and the tray body for the larger screw
+roof_side_screw_clearance = 2;
 
 // ---- cover ----
 cover_len = 76.2;
@@ -49,43 +51,46 @@ cover_z = tray_floor_thickness + cover_wall_to_floor_gap;
 cover_interlock_height = wall_height - tray_interlock_height - interlock_clearance - cover_z; // top clears the tray_interlock
 tray_len = cavity_len + tray_wall_thickness;
 tab_len = hole_spacing / 2 - tray_len / 2 + tab_margin;
+tray_shift = (hole_spacing - tray_len) / 2 - roof_hole_play - hole_diameter / 2 - roof_side_screw_clearance;
 
 module tray() {
 	difference() {
 		union() {
-			// floor
-			cube([cavity_len + tray_wall_thickness, tray_width, tray_floor_thickness]);
-			// far wall to keep one end of sensor in place
-			translate([cavity_len, 0, 0]) {
-				cube([tray_wall_thickness, tray_width, wall_height]);
-			}
-			// far roof to keep one end of sensor in place
-			translate([cavity_len - end_roof_len, 0, wall_height]) {
-				cube([end_roof_len + tray_wall_thickness, tray_width, tray_wall_thickness]);
-			}
-			// side walls, split by the side_wall_gap
-			for (y = [0, tray_width - tray_wall_thickness]) {
-				translate([0, y, 0]) {
-					cube([side_wall_gap_start, tray_wall_thickness, wall_height]);
+			translate([tray_shift, 0, 0]) {
+				// floor
+				cube([cavity_len + tray_wall_thickness, tray_width, tray_floor_thickness]);
+				// far wall to keep one end of sensor in place
+				translate([cavity_len, 0, 0]) {
+					cube([tray_wall_thickness, tray_width, wall_height]);
 				}
-				translate([side_wall_gap_end, y, 0]) {
-					cube([cavity_len + tray_wall_thickness - side_wall_gap_end, tray_wall_thickness, wall_height]);
+				// far roof to keep one end of sensor in place
+				translate([cavity_len - end_roof_len, 0, wall_height]) {
+					cube([end_roof_len + tray_wall_thickness, tray_width, tray_wall_thickness]);
 				}
-			}
-			// tray_interlock ledges at both ends of the side_wall_gap
-			for (x = [side_wall_gap_start, side_wall_gap_end - interlock_len]) {
+				// side walls, split by the side_wall_gap
 				for (y = [0, tray_width - tray_wall_thickness]) {
-					translate([x, y, wall_height - tray_interlock_height]) {
-						cube([interlock_len, tray_wall_thickness, tray_interlock_height]);
+					translate([0, y, 0]) {
+						cube([side_wall_gap_start, tray_wall_thickness, wall_height]);
+					}
+					translate([side_wall_gap_end, y, 0]) {
+						cube([cavity_len + tray_wall_thickness - side_wall_gap_end, tray_wall_thickness, wall_height]);
+					}
+				}
+				// tray_interlock ledges at both ends of the side_wall_gap
+				for (x = [side_wall_gap_start, side_wall_gap_end - interlock_len]) {
+					for (y = [0, tray_width - tray_wall_thickness]) {
+						translate([x, y, wall_height - tray_interlock_height]) {
+							cube([interlock_len, tray_wall_thickness, tray_interlock_height]);
+						}
 					}
 				}
 			}
 			// mount tabs for screws
 			translate([-tab_len, 0, 0]) {
-				cube([tab_len, tray_width, tab_thickness]);
+				cube([tab_len + tray_shift, tray_width, tab_thickness]);
 			}
-			translate([tray_len, 0, 0]) {
-				cube([tab_len, tray_width, tab_thickness]);
+			translate([tray_len + tray_shift, 0, 0]) {
+				cube([tab_len - tray_shift, tray_width, tab_thickness]);
 			}
 		}
 		// left screw hole
