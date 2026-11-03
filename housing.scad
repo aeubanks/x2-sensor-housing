@@ -17,14 +17,14 @@ sensor_height = 7.62;
 tray_wall_thickness = 2;
 // per-side clearance
 sensor_clearance = 0.5;
-tray_floor_thickness = 2;
+tray_floor_thickness = 1.5;
 end_roof_len = 5;
 
 // ---- mount tabs ----
 hole_spacing = 171;
 hole_diameter = 4.5;
 roof_hole_play = 1;
-tab_thickness = 3;
+tab_thickness = 1.5;
 // material past each hole center
 tab_margin = 5;
 // room between the roof-side slot edge and the tray body for the larger screw
