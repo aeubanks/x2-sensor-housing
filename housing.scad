@@ -18,7 +18,7 @@ tray_wall_thickness = 2;
 // per-side clearance
 sensor_clearance = 0.5;
 tray_floor_thickness = 1.5;
-end_roof_len = 12;
+end_roof_len = 5;
 
 // ---- mount tabs ----
 hole_spacing = 171;
