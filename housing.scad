@@ -36,7 +36,7 @@ cover_wall_to_floor_gap = 3;
 window_play = 1.5;       // lengthwise play between cover and side_wall_gap
 interlock_len = 8;
 tray_interlock_height = 2;   // tray wall ledge that captures the cover
-contact_pad_height = 2;  // sensor-contact pad height
+contact_pad_height = 1;  // sensor-contact pad height
 interlock_clearance = 0.5; // vertical gap so the cover slides under the tray_interlock
 
 cavity_len = sensor_len + 2 * sensor_clearance;
