@@ -93,6 +93,14 @@ module tray() {
 			translate([tray_len + tray_shift, 0, 0]) {
 				cube([tab_len - tray_shift, tray_width, tab_thickness]);
 			}
+			// corner walls at the non-roof tab's outer corners, so sensor
+			// wires can be routed to the side instead of straight where
+			// they're likely to be pinched
+			for (y = [0, tray_width - tray_wall_thickness]) {
+				translate([-tab_len, y, 0]) {
+					cube([tray_wall_thickness, tray_wall_thickness, wall_height]);
+				}
+			}
 		}
 		// left screw hole
 		translate([tray_len / 2 - hole_spacing / 2, tray_width / 2, -1]) {
