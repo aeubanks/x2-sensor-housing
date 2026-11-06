@@ -19,6 +19,7 @@ tray_wall_thickness = 2;
 sensor_clearance = 0.5;
 tray_floor_thickness = 1;
 end_roof_len = 5;
+tray_roof_thickness = 1;
 corner_wall_len = 6;
 
 // ---- mount tabs ----
@@ -65,7 +66,7 @@ module tray() {
 				}
 				// far roof to keep one end of sensor in place
 				translate([cavity_len - end_roof_len, 0, wall_height]) {
-					cube([end_roof_len + tray_wall_thickness, tray_width, tray_wall_thickness]);
+					cube([end_roof_len + tray_wall_thickness, tray_width, tray_roof_thickness]);
 				}
 				// side walls, split by the side_wall_gap
 				for (y = [0, tray_width - tray_wall_thickness]) {
