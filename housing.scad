@@ -17,7 +17,7 @@ sensor_height = 7.62;
 tray_wall_thickness = 2;
 // per-side clearance
 sensor_clearance = 0.5;
-tray_floor_thickness = 1.5;
+tray_floor_thickness = 1;
 end_roof_len = 5;
 
 // ---- mount tabs ----
@@ -32,6 +32,7 @@ roof_side_screw_clearance = 2;
 
 // ---- cover ----
 cover_len = 76.2;
+cover_roof_thickness = 1.5;
 cover_wall_to_floor_gap = 3;
 window_play = 1.5;       // lengthwise play between cover and side_wall_gap
 interlock_len = 8;
@@ -132,7 +133,7 @@ module cover() {
 	}
 	// roof between the notched ends
 	translate([-cover_len / 2 + interlock_len, 0, cover_wall_height]) {
-		cube([cover_len - 2 * interlock_len, tray_width, tray_wall_thickness]);
+		cube([cover_len - 2 * interlock_len, tray_width, cover_roof_thickness]);
 	}
 	// sensor-contact pads at both ends under roof
     // (to reduce contact area between cover and sensor for more sensitivity)
