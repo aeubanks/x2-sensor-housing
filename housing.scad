@@ -25,7 +25,6 @@ corner_wall_len = 6;
 hole_spacing = 171;
 hole_diameter = 4.5;
 roof_hole_play = 1;
-tab_thickness = 1.5;
 // material past each hole center
 tab_margin = 5;
 // room between the roof-side slot edge and the tray body for the larger screw
@@ -60,8 +59,6 @@ module tray() {
 	difference() {
 		union() {
 			translate([tray_shift, 0, 0]) {
-				// floor
-				cube([cavity_len + tray_wall_thickness, tray_width, tray_floor_thickness]);
 				// far wall to keep one end of sensor in place
 				translate([cavity_len, 0, 0]) {
 					cube([tray_wall_thickness, tray_width, wall_height]);
@@ -88,12 +85,9 @@ module tray() {
 					}
 				}
 			}
-			// mount tabs for screws
+			// unified floor spanning tray body and both mount tabs
 			translate([-tab_len, 0, 0]) {
-				cube([tab_len + tray_shift, tray_width, tab_thickness]);
-			}
-			translate([tray_len + tray_shift, 0, 0]) {
-				cube([tab_len - tray_shift, tray_width, tab_thickness]);
+				cube([tray_len + 2 * tab_len, tray_width, tray_floor_thickness]);
 			}
 			// corner walls at the non-roof tab's outer corners, so sensor
 			// wires can be routed to the side instead of straight where
@@ -113,13 +107,13 @@ module tray() {
 		}
 		// left screw hole
 		translate([tray_len / 2 - hole_spacing / 2, tray_width / 2, -1]) {
-			cylinder(d = hole_diameter, h = tab_thickness + 2);
+			cylinder(d = hole_diameter, h = tray_floor_thickness + 2);
 		}
 		// roof-side screw slot with lengthwise play toward tray center
 		hull() {
 			for (x = [tray_len / 2 + hole_spacing / 2, tray_len / 2 + hole_spacing / 2 - roof_hole_play]) {
 				translate([x, tray_width / 2, -1]) {
-					cylinder(d = hole_diameter, h = tab_thickness + 2);
+					cylinder(d = hole_diameter, h = tray_floor_thickness + 2);
 				}
 			}
 		}
