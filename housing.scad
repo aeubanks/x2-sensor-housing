@@ -21,6 +21,7 @@ tray_floor_thickness = 1;
 end_roof_len = 5;
 tray_roof_thickness = 1;
 corner_wall_len = 6;
+corner_wall_height = 6;
 
 // ---- mount tabs ----
 hole_spacing = 171;
@@ -95,13 +96,13 @@ module tray() {
 			// they're likely to be pinched
 			for (y = [0, tray_width - tray_wall_thickness]) {
 				translate([-tab_len, y, 0]) {
-					cube([corner_wall_len, tray_wall_thickness, wall_height]);
+					cube([corner_wall_len, tray_wall_thickness, corner_wall_height]);
 				}
 			}
 			// overhang for the corner wall so the wire is less likely to slip
 			// out
 			for (y = [0, tray_width - tray_wall_thickness]) {
-				translate([-tab_len + corner_wall_len, y, wall_height - tray_interlock_height]) {
+				translate([-tab_len + corner_wall_len, y, corner_wall_height - tray_interlock_height]) {
 					cube([interlock_len, tray_wall_thickness, tray_interlock_height]);
 				}
 			}
