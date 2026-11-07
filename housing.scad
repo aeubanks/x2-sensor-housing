@@ -22,6 +22,7 @@ end_roof_len = 5;
 tray_roof_thickness = 1;
 corner_wall_len = 6;
 corner_wall_height = 6;
+side_wall_height = 7.62;
 
 // ---- mount tabs ----
 hole_spacing = 171;
@@ -35,7 +36,6 @@ roof_side_screw_clearance = 2;
 // ---- cover ----
 cover_len = 76.2;
 cover_roof_thickness = 1.5;
-cover_wall_to_floor_gap = 3;
 window_play = 1.5;       // lengthwise play between cover and side_wall_gap
 interlock_len = 8;
 tray_interlock_height = 2;   // tray wall ledge that captures the cover
@@ -50,9 +50,9 @@ wall_height = tray_floor_thickness + sensor_height;
 side_wall_gap = cover_len + 2 * window_play;
 side_wall_gap_start = (cavity_len - side_wall_gap) / 2;
 side_wall_gap_end = (cavity_len + side_wall_gap) / 2;
-cover_wall_height = sensor_height + contact_pad_height - cover_wall_to_floor_gap + tray_wall_thickness - cover_roof_thickness; // roof sits on the pads, so cover is lifted by pad height
-cover_z = tray_floor_thickness + cover_wall_to_floor_gap;
-cover_interlock_height = wall_height - tray_interlock_height - interlock_clearance - cover_z; // top clears the tray_interlock
+cover_wall_height = 7.12;
+cover_z = 3;
+cover_interlock_height = side_wall_height - tray_interlock_height - interlock_clearance - cover_z; // top clears the tray_interlock
 tray_len = cavity_len + tray_wall_thickness;
 tab_len = hole_spacing / 2 - tray_len / 2 + tab_margin;
 tray_shift = (hole_spacing - tray_len) / 2 - roof_hole_play - hole_diameter / 2 - roof_side_screw_clearance;
@@ -69,19 +69,25 @@ module tray() {
 				translate([cavity_len - end_roof_len, 0, wall_height]) {
 					cube([end_roof_len + tray_wall_thickness, tray_width, tray_roof_thickness]);
 				}
+				// side walls covering the exposed sides of the far roof
+				for (y = [0, tray_width - tray_wall_thickness]) {
+					translate([cavity_len - end_roof_len, y, side_wall_height]) {
+						cube([end_roof_len + tray_wall_thickness, tray_wall_thickness, wall_height - side_wall_height]);
+					}
+				}
 				// side walls, split by the side_wall_gap
 				for (y = [0, tray_width - tray_wall_thickness]) {
 					translate([0, y, 0]) {
-						cube([side_wall_gap_start, tray_wall_thickness, wall_height]);
+						cube([side_wall_gap_start, tray_wall_thickness, side_wall_height]);
 					}
 					translate([side_wall_gap_end, y, 0]) {
-						cube([cavity_len + tray_wall_thickness - side_wall_gap_end, tray_wall_thickness, wall_height]);
+						cube([cavity_len + tray_wall_thickness - side_wall_gap_end, tray_wall_thickness, side_wall_height]);
 					}
 				}
 				// tray_interlock ledges at both ends of the side_wall_gap
 				for (x = [side_wall_gap_start, side_wall_gap_end - interlock_len]) {
 					for (y = [0, tray_width - tray_wall_thickness]) {
-						translate([x, y, wall_height - tray_interlock_height]) {
+						translate([x, y, side_wall_height - tray_interlock_height]) {
 							cube([interlock_len, tray_wall_thickness, tray_interlock_height]);
 						}
 					}
